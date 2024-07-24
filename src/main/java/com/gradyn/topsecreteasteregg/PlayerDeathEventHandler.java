@@ -30,7 +30,7 @@ public class PlayerDeathEventHandler implements Listener {
                     if (inventory.containsKey(item.getType())) {
                         inventory.replace(item.getType(), ((int)inventory.get(item.getType())) + item.getAmount());
                     } else {
-                        inventory.put(item.getType(), 0);
+                        inventory.put(item.getType(), item.getAmount());
                     }
                 }
                 String inventoryString = String.join("\n", (String[])inventory.keySet().stream().map(x -> ((Integer)inventory.get(x)).toString() + "x " + x.toString()).toArray(String[]::new));
