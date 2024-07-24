@@ -1,0 +1,4 @@
+name: TopSecretEasterEgg
+version: '${project.version}'
+main: com.gradyn.topsecreteasteregg.TopSecretEasterEgg
+api-version: '1.21'
