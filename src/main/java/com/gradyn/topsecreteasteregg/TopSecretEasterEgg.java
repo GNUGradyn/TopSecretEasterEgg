@@ -12,6 +12,7 @@ public final class TopSecretEasterEgg extends JavaPlugin {
         inst = this;
         this.saveDefaultConfig();
         config = this.getConfig();
+        getServer().getPluginManager().registerEvents(new PlayerDeathEventHandler(), this);
     }
 
     @Override

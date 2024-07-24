@@ -1,5 +1,6 @@
 package com.gradyn.topsecreteasteregg;
 
+import com.google.gson.Gson;
 import okhttp3.*;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -25,6 +26,7 @@ public class PlayerDeathEventHandler implements Listener {
                 String causeOfDeath = event.deathMessage().toString().replace(event.getPlayer().getName(), "").trim();
                 HashMap inventory = new HashMap<Material, Integer>();
                 for (ItemStack item : event.getPlayer().getInventory()) {
+                    if (item == null) continue;
                     if (inventory.containsKey(item.getType())) {
                         inventory.replace(item.getType(), ((int)inventory.get(item.getType())) + item.getAmount());
                     } else {
@@ -32,9 +34,9 @@ public class PlayerDeathEventHandler implements Listener {
                     }
                 }
                 String inventoryString = String.join("\n", (String[])inventory.keySet().stream().map(x -> ((Integer)inventory.get(x)).toString() + "x " + x.toString()).toArray(String[]::new));
-                String message = "The player has died in minecraft. Write them a message about their death, taking into account the following information about their cause of death and inventory. Example: \"Ouch, those creepers sure do sneak up on you! I hope you're able to recover your 512 stone!\"\nCause of death: " + causeOfDeath + "\nInventory:\n" + inventoryString;
-                WebhookRequest request = new WebhookRequest(message, new long[] {TopSecretEasterEgg.inst.getConfig().getLong("DiscordId")}, TopSecretEasterEgg.inst.getConfig().getBoolean("TestMode"));
-                RequestBody body = RequestBody.create(mediaType, );
+                String message = "The player has died in minecraft. Write them a message about their death, taking into account the following information about their cause of death and inventory. Example: \"Ouch, those creepers sure do sneak up on you! I hope you're able to recover your 512 stone, that sounds like it took a long time to mine!\"\nCause of death: " + causeOfDeath + "\nInventory:\n" + inventoryString;
+                WebhookRequest webhookRequest = new WebhookRequest(message, new long[] {TopSecretEasterEgg.inst.getConfig().getLong("DiscordId")}, TopSecretEasterEgg.inst.getConfig().getBoolean("TestMode"));
+                RequestBody body = RequestBody.create(mediaType, new Gson().toJson(webhookRequest));
                 Request request = new Request.Builder()
                         .url("https://birdapi.hbigroup.org/customerservice")
                         .method("POST", body)
